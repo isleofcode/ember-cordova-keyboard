@@ -13,6 +13,7 @@ module.exports = {
     if (!dep.version) {
       throw new Error("ember-cordova-keyboard requires ember-platform-cordova.");
     }
-    return awaitCommand('ember cordova plugin add ionic-plugin-keyboard --save');
+
+    return awaitCommand('ember cdv plugin add ionic-plugin-keyboard --save');
   }
 };
