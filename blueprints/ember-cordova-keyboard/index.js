@@ -9,9 +9,9 @@ module.exports = {
 
   afterInstall: function() {
     var checker = new VersionChecker(this);
-    var dep = checker.for('ember-platform-cordova', 'npm');
+    var dep = checker.for('ember-cordova', 'npm');
     if (!dep.version) {
-      throw new Error("ember-cordova-keyboard requires ember-platform-cordova.");
+      throw new Error("ember-cordova-keyboard requires ember-cordova.");
     }
 
     return awaitCommand('ember cdv plugin add ionic-plugin-keyboard --save');
