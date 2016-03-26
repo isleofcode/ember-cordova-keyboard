@@ -40,7 +40,11 @@
     "loader.js": "^4.0.0"
   },
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "ember-cordova",
+    "cordova",
+    "phonegap",
+    "keyboard"
   ],
   "dependencies": {
     "chalk": "^1.1.1",
