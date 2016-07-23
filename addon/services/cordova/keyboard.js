@@ -31,8 +31,8 @@ export default Service.extend(Evented, {
   },
 
   willDestroy() {
-    this._super();
     this.teardownListeners();
+    this._super();
   },
 
   _keyboard: null,
