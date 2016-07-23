@@ -78,6 +78,14 @@ export default Service.extend(Evented, {
   },
 
   disableScroll(bool) {
+    if (bool === undefined) {
+      bool = true;
+    }
+
+    if (bool !== true && bool !== false) {
+      throw new Error('invalid argument');
+    }
+
     this.keyboard().then((kb) => {
       this.set('shouldDisableScroll', bool);
       kb.disableScroll(bool);
