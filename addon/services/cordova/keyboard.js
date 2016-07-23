@@ -1,4 +1,4 @@
-/* global cordova */
+/* global context */
 import Ember from 'ember';
 
 const {
@@ -42,7 +42,7 @@ export default Service.extend(Evented, {
 
     return this.get('cordova').ready()
       .then(() => {
-        this._keyboard = cordova.plugins.Keyboard;
+        this._keyboard = context.cordova.plugins.Keyboard;
         return this._keyboard;
       });
   },
