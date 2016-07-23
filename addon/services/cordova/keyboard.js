@@ -54,7 +54,7 @@ export default Service.extend(Evented, {
 
       if (kb.isVisible) {
         if (elementShouldFocus) { element.focus(); }
-        return true;
+        return Promise.resolve();
       }
 
       return new Promise(resolve => {
@@ -66,7 +66,9 @@ export default Service.extend(Evented, {
 
   close() {
     return this.keyboard().then(kb => {
-      if (!kb.isVisible) { return true; }
+      if (!kb.isVisible) {
+        return Promise.resolve();
+      }
 
       return new Promise(resolve => {
         kb.close();
