@@ -6,6 +6,7 @@ const {
   Evented,
   RSVP,
   Service,
+  copy,
   inject,
   run
 } = Ember;
@@ -122,7 +123,7 @@ export default Service.extend(Evented, {
   },
 
   teardownListeners() {
-    const listeners = this._listeners;
+    const listeners = copy(this._listeners); // cache for iterator manipulation
 
     listeners.forEach(listener => {
       window.removeEventListener(listener.name, listener.fn, true);
