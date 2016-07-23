@@ -20,7 +20,7 @@ export default Service.extend(Evented, {
   shouldDisableScroll: true,
   keyboardHeight: 0,
 
-  _listeners: [],
+  _listeners: null,
   _height: null,
 
   init() {
@@ -90,11 +90,7 @@ export default Service.extend(Evented, {
           ];
 
     kb.disableScroll(this.get('shouldDisableScroll'));
-
-    listeners.forEach(listener => {
-      this._listeners.pushObject(listener);
-      window.addEventListener(listener.name, listener.fn, true);
-    });
+    this.setupListeners(listeners);
   },
 
   onKeyboardShow(e) {
@@ -116,6 +112,13 @@ export default Service.extend(Evented, {
     }
 
     this.trigger('keyboardDidHide', e);
+  },
+
+  setupListeners(listeners) {
+    listeners.forEach(listener => {
+      window.addEventListener(listener.name, listener.fn, true);
+      this._listeners.pushObject(listener);
+    });
   },
 
   teardownListeners() {
