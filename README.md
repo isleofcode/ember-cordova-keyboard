@@ -2,4 +2,4 @@
 
 This plugin is currently built to work with [ember-cordova](https://github.com/isleofcode/ember-cordova).
 
-For documentation on this plugin, please go [here](https://github.com/isleofcode/ember-cordova/blob/master/docs/keyboard.md).
+For documentation on this plugin, please go [here](http://embercordova.com/pages/service_keyboard).
