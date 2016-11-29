@@ -1,4 +1,4 @@
-/* global cordova */
+/* global context */
 import Ember from 'ember';
 
 const {
@@ -6,6 +6,7 @@ const {
   Evented,
   RSVP,
   Service,
+  copy,
   inject,
   run
 } = Ember;
@@ -20,7 +21,7 @@ export default Service.extend(Evented, {
   shouldDisableScroll: true,
   keyboardHeight: 0,
 
-  _listeners: [],
+  _listeners: null,
   _height: null,
 
   init() {
@@ -31,8 +32,8 @@ export default Service.extend(Evented, {
   },
 
   willDestroy() {
-    this._super();
     this.teardownListeners();
+    this._super();
   },
 
   _keyboard: null,
@@ -41,7 +42,7 @@ export default Service.extend(Evented, {
 
     return this.get('cordova').ready()
       .then(() => {
-        this._keyboard = cordova.plugins.Keyboard;
+        this._keyboard = context.cordova.plugins.Keyboard;
         return this._keyboard;
       });
   },
@@ -53,7 +54,7 @@ export default Service.extend(Evented, {
 
       if (kb.isVisible) {
         if (elementShouldFocus) { element.focus(); }
-        return true;
+        return Promise.resolve();
       }
 
       return new Promise(resolve => {
@@ -65,7 +66,9 @@ export default Service.extend(Evented, {
 
   close() {
     return this.keyboard().then(kb => {
-      if (!kb.isVisible) { return true; }
+      if (!kb.isVisible) {
+        return Promise.resolve();
+      }
 
       return new Promise(resolve => {
         kb.close();
@@ -75,6 +78,14 @@ export default Service.extend(Evented, {
   },
 
   disableScroll(bool) {
+    if (bool === undefined) {
+      bool = true;
+    }
+
+    if (bool !== true && bool !== false) {
+      throw new Error('invalid argument');
+    }
+
     this.keyboard().then((kb) => {
       this.set('shouldDisableScroll', bool);
       kb.disableScroll(bool);
@@ -90,11 +101,7 @@ export default Service.extend(Evented, {
           ];
 
     kb.disableScroll(this.get('shouldDisableScroll'));
-
-    listeners.forEach(listener => {
-      this._listeners.pushObject(listener);
-      window.addEventListener(listener.name, listener.fn, true);
-    });
+    this.setupListeners(listeners);
   },
 
   onKeyboardShow(e) {
@@ -118,8 +125,15 @@ export default Service.extend(Evented, {
     this.trigger('keyboardDidHide', e);
   },
 
+  setupListeners(listeners) {
+    listeners.forEach(listener => {
+      window.addEventListener(listener.name, listener.fn, true);
+      this._listeners.pushObject(listener);
+    });
+  },
+
   teardownListeners() {
-    const listeners = this._listeners;
+    const listeners = copy(this._listeners); // cache for iterator manipulation
 
     listeners.forEach(listener => {
       window.removeEventListener(listener.name, listener.fn, true);
