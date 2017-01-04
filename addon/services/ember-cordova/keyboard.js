@@ -14,8 +14,6 @@ const { Promise } = RSVP;
 const KEYBOARD_ANIMATION_TIME = 300; //ms, guestimated from SO recommendations
 
 export default Service.extend(Evented, {
-  cordova: inject.service('cordova'),
-
   adjustBodyHeight: true,
   shouldDisableScroll: true,
   keyboardHeight: 0,
@@ -39,11 +37,12 @@ export default Service.extend(Evented, {
   keyboard() {
     if (this._keyboard) { return Promise.resolve(this._keyboard); }
 
-    return this.get('cordova').ready()
-      .then(() => {
-        this._keyboard = cordova.plugins.Keyboard;
-        return this._keyboard;
-      });
+    return new Promise((resolve) => {
+      document.addEventListener("deviceready", () => {
+        this._keyboard = window.cordova.plugins.Keyboard;
+        resolve(this._keyboard);
+      }, false);
+    });
   },
 
   open(element) {
@@ -83,11 +82,11 @@ export default Service.extend(Evented, {
 
   setup(kb) {
     const onKeyboardShow = this.onKeyboardShow.bind(this),
-          onKeyboardHide = this.onKeyboardHide.bind(this),
-          listeners = [
-            { name: 'native.keyboardshow', fn: onKeyboardShow },
-            { name: 'native.keyboardhide', fn: onKeyboardHide }
-          ];
+    onKeyboardHide = this.onKeyboardHide.bind(this),
+    listeners = [
+      { name: 'native.keyboardshow', fn: onKeyboardShow },
+      { name: 'native.keyboardhide', fn: onKeyboardHide }
+    ];
 
     kb.disableScroll(this.get('shouldDisableScroll'));
 
