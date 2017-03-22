@@ -1,6 +1,6 @@
 import { moduleFor, test } from 'ember-qunit';
 
-moduleFor('service:cordova/keyboard', 'Unit | Service | cordova/keyboard', {
+moduleFor('service:ember-cordova/keyboard', 'Unit | Service | ember-cordova/keyboard', {
   // Specify the other units that are required for this test.
   // needs: ['service:foo']
 });
