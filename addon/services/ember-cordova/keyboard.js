@@ -1,4 +1,3 @@
-/* global cordova */
 import Ember from 'ember';
 
 const {
@@ -6,7 +5,6 @@ const {
   Evented,
   RSVP,
   Service,
-  inject,
   run
 } = Ember;
 
