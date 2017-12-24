@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "ember-cli-babel": "^5.1.7",
-    "ember-cordova-installer": "^0.0.2"
+    "ember-cordova-installer": "^0.0.3"
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
