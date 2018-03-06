@@ -13,7 +13,6 @@ const KEYBOARD_ANIMATION_TIME = 300; //ms, guestimated from SO recommendations
 
 export default Service.extend(Evented, {
   adjustBodyHeight: true,
-  shouldDisableScroll: true,
   keyboardHeight: 0,
 
   _listeners: [],
@@ -23,7 +22,7 @@ export default Service.extend(Evented, {
     this._super();
 
     this._listeners = new A();
-    this.keyboard().then(kb => { this.setup(kb); });
+    this.keyboard().then(() => { this.setup(); });
   },
 
   willDestroy() {
@@ -74,22 +73,13 @@ export default Service.extend(Evented, {
     });
   },
 
-  disableScroll(bool) {
-    this.keyboard().then((kb) => {
-      this.set('shouldDisableScroll', bool);
-      kb.disableScroll(bool);
-    });
-  },
-
-  setup(kb) {
+  setup() {
     const onKeyboardShow = this.onKeyboardShow.bind(this),
     onKeyboardHide = this.onKeyboardHide.bind(this),
     listeners = [
       { name: 'native.keyboardshow', fn: onKeyboardShow },
       { name: 'native.keyboardhide', fn: onKeyboardHide }
     ];
-
-    kb.disableScroll(this.get('shouldDisableScroll'));
 
     listeners.forEach(listener => {
       this._listeners.pushObject(listener);
