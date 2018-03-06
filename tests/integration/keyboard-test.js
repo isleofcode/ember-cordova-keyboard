@@ -22,11 +22,7 @@ moduleFor('service:ember-cordova/keyboard', 'Integration | Service | cordova/key
       focus: function() {}
     });
 
-    window.cordova = {
-      plugins: {
-        Keyboard: this.pluginDouble
-      }
-    };
+    window.Keyboard = this.pluginDouble;
   },
 
   afterEach: function() {

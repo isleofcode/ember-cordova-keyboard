@@ -37,7 +37,10 @@ export default Service.extend(Evented, {
 
     return new Promise((resolve) => {
       document.addEventListener("deviceready", () => {
-        this._keyboard = window.cordova.plugins.Keyboard;
+        // The location of Keyboard moved between ionic-plugin-keyboard and
+        // cordova-plugin-ionic-keyboard, but in order to ensure a smooth
+        // upgrade, we check both.
+        this._keyboard = window.Keyboard || window.cordova.plugins.Keyboard;
         resolve(this._keyboard);
       }, false);
     });
