@@ -76,15 +76,27 @@ export default Service.extend(Evented, {
   setup() {
     const onKeyboardShow = this.onKeyboardShow.bind(this),
     onKeyboardHide = this.onKeyboardHide.bind(this),
+    onKeyboardWillHide = this.onKeyboardWillHide.bind(this),
+    onKeyboardWillShow = this.onKeyboardWillShow.bind(this),
     listeners = [
-      { name: 'native.keyboardshow', fn: onKeyboardShow },
-      { name: 'native.keyboardhide', fn: onKeyboardHide }
+      { name: 'keyboardWillShow', fn: onKeyboardWillShow },
+      { name: 'keyboardWillHide', fn: onKeyboardWillHide },
+      { name: 'keyboardDidShow', fn: onKeyboardShow },
+      { name: 'keyboardDidHide', fn: onKeyboardHide }
     ];
 
     listeners.forEach(listener => {
       this._listeners.pushObject(listener);
       window.addEventListener(listener.name, listener.fn, true);
     });
+  },
+
+  onKeyboardWillShow(e) {
+    this.trigger('keyboardWillShow', e);
+  },
+
+  onKeyboardWillHide(e) {
+    this.trigger('keyboardWillHide', e);
   },
 
   onKeyboardShow(e) {
