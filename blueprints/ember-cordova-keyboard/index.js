@@ -6,7 +6,7 @@ module.exports = {
   normalizeEntityName: function() {},
 
   afterInstall: function() {
-    ecInstaller.install('ionic-plugin-keyboard', this);
+    ecInstaller.install('cordova-plugin-ionic-keyboard', this);
   }
 };
 
