@@ -11,7 +11,7 @@
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "",
+  "repository": "github:isleofcode/ember-cordova-keyboard",
   "scripts": {
     "build": "ember build",
     "start": "ember server",
