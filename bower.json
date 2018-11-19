@@ -1,6 +1,0 @@
-{
-  "name": "ember-cordova-keyboard",
-  "dependencies": {
-    "testdouble": "testdouble/testdouble.js#^1.4.2"
-  }
-}
