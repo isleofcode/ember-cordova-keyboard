@@ -17,7 +17,7 @@ export default Service.extend(Evented, {
   init() {
     this._super();
 
-    this._listeners = new A();
+    this._listeners = A();
     this.keyboard().then(() => { this.setup(); });
   },
 
