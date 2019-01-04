@@ -1,17 +1,18 @@
 /* global Event */
-import { moduleFor, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
+import { settled } from '@ember/test-helpers';
 import td from 'testdouble';
-import wait from 'ember-test-helpers/wait';
 
 const fireDeviceReady = function() {
   window.document.dispatchEvent(new Event('deviceready'));
 };
 
-moduleFor('service:ember-cordova/keyboard', 'Integration | Service | cordova/keyboard', {
-  integration: true,
+module('Integration | Service | cordova/keyboard', function(hooks) {
+  setupTest(hooks);
 
-  beforeEach: function() {
-    this.keyboardService = this.subject();
+  hooks.beforeEach(function() {
+    this.keyboardService = this.owner.lookup('service:ember-cordova/keyboard');
 
     this.pluginDouble = td.object({
       close: function() {},
@@ -23,65 +24,65 @@ moduleFor('service:ember-cordova/keyboard', 'Integration | Service | cordova/key
     });
 
     window.Keyboard = this.pluginDouble;
-  },
+  });
 
-  afterEach: function() {
+  hooks.afterEach(function() {
     td.reset();
-  }
-});
-
-test('close event proxied when keyboard is visible', function(assert) {
-  assert.expect(0);
-
-  this.pluginDouble.isVisible = true;
-
-  this.keyboardService.close();
-  fireDeviceReady();
-
-  return wait().then(() => {
-    td.verify(this.pluginDouble.close());
   });
-});
 
-test('calling close resolves with true if keyboard is initially not visible', function(assert) {
-  assert.expect(1);
+  test('close event proxied when keyboard is visible', function(assert) {
+    assert.expect(0);
 
-  this.pluginDouble.isVisible = false;
+    this.pluginDouble.isVisible = true;
 
-  this.keyboardService.close().then((value) => {
-    this.resolvedCloseValue = value;
+    this.keyboardService.close();
+    fireDeviceReady();
+
+    return settled().then(() => {
+      td.verify(this.pluginDouble.close());
+    });
   });
-  fireDeviceReady();
 
-  return wait().then(() => {
-    assert.ok(this.resolvedCloseValue);
+  test('calling close resolves with true if keyboard is initially not visible', function(assert) {
+    assert.expect(1);
+
+    this.pluginDouble.isVisible = false;
+
+    this.keyboardService.close().then((value) => {
+      this.resolvedCloseValue = value;
+    });
+    fireDeviceReady();
+
+    return settled().then(() => {
+      assert.ok(this.resolvedCloseValue);
+    });
   });
-});
 
-test('calling open resolves with true if keyboard is initially visible', function(assert) {
-  assert.expect(1);
+  test('calling open resolves with true if keyboard is initially visible', function(assert) {
+    assert.expect(1);
 
-  this.pluginDouble.isVisible = true;
+    this.pluginDouble.isVisible = true;
 
-  this.keyboardService.open(this.elementDouble).then((value) => {
-    this.resolvedOpenValue = value;
+    this.keyboardService.open(this.elementDouble).then((value) => {
+      this.resolvedOpenValue = value;
+    });
+    fireDeviceReady();
+
+    return settled().then(() => {
+      assert.ok(this.resolvedOpenValue);
+    });
   });
-  fireDeviceReady();
 
-  return wait().then(() => {
-    assert.ok(this.resolvedOpenValue);
-  });
-});
+  test('calling open focuses the element', function(assert) {
+    assert.expect(0);
 
-test('calling open focuses the element', function(assert) {
-  assert.expect(0);
+    this.pluginDouble.isVisible = false;
 
-  this.pluginDouble.isVisible = false;
+    this.keyboardService.open(this.elementDouble);
+    fireDeviceReady();
 
-  this.keyboardService.open(this.elementDouble);
-  fireDeviceReady();
-
-  return wait().then(() => {
-    td.verify(this.elementDouble.focus());
+    return settled().then(() => {
+      td.verify(this.elementDouble.focus());
+    });
   });
 });

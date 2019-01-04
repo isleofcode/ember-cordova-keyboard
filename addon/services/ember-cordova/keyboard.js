@@ -1,12 +1,8 @@
-import Ember from 'ember';
-
-const {
-  A,
-  Evented,
-  RSVP,
-  Service,
-  run
-} = Ember;
+import { A } from '@ember/array';
+import Evented from '@ember/object/evented';
+import RSVP from 'rsvp';
+import Service from '@ember/service';
+import { run } from '@ember/runloop';
 
 const { Promise } = RSVP;
 const KEYBOARD_ANIMATION_TIME = 300; //ms, guestimated from SO recommendations
@@ -15,13 +11,13 @@ export default Service.extend(Evented, {
   adjustBodyHeight: true,
   keyboardHeight: 0,
 
-  _listeners: [],
+  _listeners: null,
   _height: null,
 
   init() {
     this._super();
 
-    this._listeners = new A();
+    this._listeners = A();
     this.keyboard().then(() => { this.setup(); });
   },
 
