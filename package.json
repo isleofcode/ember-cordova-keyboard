@@ -1,6 +1,6 @@
 {
   "name": "ember-cordova-keyboard",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
     "ember-addon"
